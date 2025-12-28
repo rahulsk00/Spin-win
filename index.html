@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year Spin & Win</title>
+    <!-- External Library for Confetti Animation -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Satisfy&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #ff0055;
+            --secondary-color: #6a00ff;
+            --accent-gold: #ffd700;
+            --text-color: #ffffff;
+            /* Festive Background Gradient */
+            --bg-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            padding-bottom: 20px;
+            position: relative;
+            /* Animation for background gradient */
+            animation: gradientMove 15s ease infinite;
+        }
+
+        /* --- Ad Wrapper Styling --- */
+        .ad-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0; 
+            overflow: hidden;
+            background: rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+        .ad-wrapper iframe {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* --- Soft Ambient Lighting Effect --- */
+        .ambient-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 0, 85, 0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(60px);
+            animation: pulse-glow 4s infinite alternate;
+        }
+        
+        .ambient-glow-2 {
+            position: fixed;
+            top: 20%;
+            right: 10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, rgba(0,0,0,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(80px);
+            animation: pulse-glow 6s infinite alternate-reverse;
+        }
+
+        /* --- Header & Animations --- */
+        header {
+            text-align: center;
+            padding: 10px 20px 10px;
+            position: relative;
+            z-index: 2; 
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hny-main {
+            font-family: 'Satisfy', cursive; 
+            font-size: 2.5rem; 
+            line-height: 1.2;
+            background: linear-gradient(45deg, #ff0000, #ffd700, #00ff00, #00ffff);
+            background-size: 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow-flow 4s ease infinite;
+            margin-bottom: 5px;
+            text-shadow: 0px 0px 10px rgba(255,255,255,0.3);
+        }
+
+        .hny-tagline {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            color: #ddd;
+            font-weight: 600;
+            animation: bounce-subtitle 2s infinite;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Wheel Container */
+        .wheel-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 10px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #ff3333;
+            z-index: 10;
+            filter: drop-shadow(0 0 5px #ff0000);
+        }
+
+        /* Wheel Image (Rotates) */
+        #wheel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--secondary-color), 0 0 50px rgba(106, 0, 255, 0.4);
+            transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        /* Center Button Image (Static, Does not rotate) */
+        #center-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* Adjust width as needed. 25% of 320px is 80px. */
+            width: 80px; 
+            height: auto;
+            z-index: 11; /* Higher than pointer and wheel */
+            pointer-events: none; /* Allows clicking through to elements below if needed, though spin is via bottom button */
+        }
+
+        /* Spin Button */
+        .spin-btn {
+            display: block; 
+            margin: 20px auto 20px auto; 
+            z-index: 2;
+            
+            background: linear-gradient(45deg, #ff0055, #ff4400);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+            border: none;
+            padding: 15px 60px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.6);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .spin-btn:hover {
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: 0 0 30px #ff0055, 0 0 10px #ffd700;
+        }
+
+        .spin-btn:active {
+            transform: scale(0.95);
+        }
+
+        .spin-btn:disabled {
+            background: #444;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Footer for Bottom Ad */
+        footer {
+            margin-top: auto;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Modal System */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(8px);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            width: 340px; 
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.3);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+            font-family: 'Satisfy', cursive;
+        }
+
+        .modal-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px; 
+            color: #ddd;
+            line-height: 1.5;
+        }
+
+        .prize-highlight {
+            color: #00ffaa;
+            font-weight: bold;
+            font-size: 1.3rem;
+            display: block;
+            margin: 10px 0;
+            text-shadow: 0 0 10px #00ffaa;
+        }
+
+        .instruction-text {
+            font-size: 0.95rem;
+            color: #bbb;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .highlight-instruction {
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        /* Form Styles inside Modal */
+        .form-group {
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: none; 
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: #ff0055;
+            box-shadow: 0 0 8px rgba(255, 0, 85, 0.3);
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #1ebc57;
+            box-shadow: 0 0 15px #25D366;
+        }
+
+        /* --- Animations Keyframes --- */
+        @keyframes rainbow-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes bounce-subtitle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Background Animation */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Soft Lighting Pulse */
+        @keyframes pulse-glow {
+            0% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        @media (min-width: 600px) {
+            .wheel-container { width: 450px; height: 450px; }
+            #center-btn { width: 110px; } /* Larger center button for larger wheel */
+            .hny-main { font-size: 4rem; }
+            .hny-tagline { font-size: 1.5rem; }
+            .modal-content { width: 360px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Lighting Elements (Glow) -->
+    <div class="ambient-glow"></div>
+    <div class="ambient-glow-2"></div>
+
+    <header>
+        <div class="ad-wrapper">
+            <script>
+              atOptions = {
+                'key' : '67ac92f28b0f5626c1bd4bcf49f32da4',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highperformanceformat.com/67ac92f28b0f5626c1bd4bcf49f32da4/invoke.js"></script>
+        </div>
+
+        <h1 class="hny-main">Happy New Year 2026</h1>
+        <p class="hny-tagline">Spin & Win Guaranteed Prizes!</p>
+    </header>
+
+    <main>
+        <div class="wheel-container">
+            <div class="pointer"></div>
+            <img src="spin.png" id="wheel-image" alt="Spin Wheel">
+            <!-- Static Center Button Added Here -->
+            <img src="button.png" id="center-btn" alt="Center Button">
+        </div>
+
+        <button class="spin-btn" id="spin-btn" onclick="spinWheel()">SPIN NOW</button>
+    </main>
+
+    <!-- WIN & CLAIM MODAL -->
+    <div class="modal-overlay" id="win-modal">
+        <div class="modal-content">
+            
+            <div class="ad-wrapper">
+                <script>
+                  atOptions = {
+                    'key' : '67ac92f28b0f5626c1bd4bcf49f32da4',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                  };
+                </script>
+                <script src="https://www.highperformanceformat.com/67ac92f28b0f5626c1bd4bcf49f32da4/invoke.js"></script>
+            </div>
+
+            <h2 class="modal-title">Congratulations!</h2>
+            <p class="modal-text">You won:<br><span id="winning-prize" class="prize-highlight">Prize Name</span></p>
+            
+            <div class="instruction-text">
+                <p>Share with <span class="highlight-instruction">10 WhatsApp friends</span>.</p>
+                <p style="font-size: 0.85rem; margin-top:5px;">Prize will be claimed after sharing.</p>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="name" class="form-input" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" id="mobile" class="form-input" placeholder="Enter mobile number" pattern="[0-9]{10}" required title="Please enter a valid 10-digit number">
+            </div>
+
+            <button class="action-btn whatsapp-btn" id="whatsapp-btn">
+                <span>SHARE AND CLAIM PRIZE</span>
+            </button>
+
+            <div class="ad-wrapper" style="margin-top: 15px;">
+                <script>
+                  atOptions = {
+                    'key' : '67ac92f28b0f5626c1bd4bcf49f32da4',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                  };
+                </script>
+                <script src="https://www.highperformanceformat.com/67ac92f28b0f5626c1bd4bcf49f32da4/invoke.js"></script>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SUCCESS MODAL -->
+    <div class="modal-overlay" id="success-modal">
+        <div class="modal-content">
+            <div class="ad-wrapper">
+                <script>
+                  atOptions = {
+                    'key' : '67ac92f28b0f5626c1bd4bcf49f32da4',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                  };
+                </script>
+                <script src="https://www.highperformanceformat.com/67ac92f28b0f5626c1bd4bcf49f32da4/invoke.js"></script>
+            </div>
+
+            <h2 class="modal-title">Submitted!</h2>
+            <p class="modal-text">Your prize claim has been submitted successfully!</p>
+            <p class="modal-text" style="color: var(--accent-gold);">Congratulations again! You will be contacted soon.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="ad-wrapper">
+            <script>
+              atOptions = {
+                'key' : '67ac92f28b0f5626c1bd4bcf49f32da4',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highperformanceformat.com/67ac92f28b0f5626c1bd4bcf49f32da4/invoke.js"></script>
+        </div>
+    </footer>
+
+    <script>
+        const segments = [
+            "₹100 PayTM Cash",          // 0
+            "Movie Ticket",             // 1
+            "iPhone 14",                // 2
+            "Samsung TV",               // 3
+            "Smartwatch",               // 4
+            "Bluetooth Speaker",       // 5
+            "AirPods",                  // 6
+            "Better Luck Next Time",    // 7 (Losing Segment)
+            "Amazon Voucher ₹50",       // 8
+            "Free Coffee Coupon",       // 9
+            "20% Discount Voucher",    // 10
+            "Surprise Gift Box"         // 11
+        ];
+
+        let hasSpun = false;
+        let currentRotation = 0;
+        const wheelImage = document.getElementById('wheel-image');
+        const spinBtn = document.getElementById('spin-btn');
+        
+        const winModal = document.getElementById('win-modal');
+        const successModal = document.getElementById('success-modal');
+        
+        // --- Wheel Logic ---
+        
+        function spinWheel() {
+            if (hasSpun) return; 
+
+            hasSpun = true;
+            spinBtn.disabled = true;
+            spinBtn.textContent = "Spinning...";
+
+            // Determine Winner (Avoid Index 7)
+            let winningIndex;
+            do {
+                winningIndex = Math.floor(Math.random() * segments.length);
+            } while (winningIndex === 7);
+
+            const winningPrizeName = segments[winningIndex];
+            console.log(`Selected Winner: Index ${winningIndex} - ${winningPrizeName}`);
+
+            // Calculate Rotation
+            const segmentAngle = 360 / 12;
+            
+            // Calculate exact rotation to bring the winning segment to the TOP pointer
+            const randomOffset = Math.floor(Math.random() * 20) - 10; 
+            
+            let extraSpins = 5 * 360; 
+            let targetAngle = extraSpins + (360 - (winningIndex * segmentAngle)) + randomOffset;
+            
+            const currentMod = currentRotation % 360;
+            targetAngle += (360 - currentMod);
+
+            currentRotation = targetAngle;
+            wheelImage.style.transform = `rotate(${currentRotation}deg)`;
+
+            setTimeout(() => {
+                showWinResult(winningPrizeName);
+            }, 5000);
+        }
+
+        function showWinResult(prize) {
+            triggerConfetti();
+            document.getElementById('winning-prize').textContent = prize;
+            winModal.classList.add('active');
+        }
+
+        document.getElementById('whatsapp-btn').addEventListener('click', function() {
+            const name = document.getElementById('name').value;
+            const mobile = document.getElementById('mobile').value;
+
+            if(name.trim() === "" || mobile.trim() === "") {
+                alert("Please enter your Name and Mobile Number to claim prize.");
+                return;
+            }
+
+            // Open WhatsApp
+            const shareText = "I just won a prize on Happy New Year 2026 Spin & Win! Try your luck now!";
+            const shareUrl = window.location.href;
+            const whatsappLink = `https://wa.me/?text=${encodeURIComponent(shareText + " " + shareUrl)}`;
+            window.open(whatsappLink, '_blank');
+
+            this.textContent = "Submitting...";
+            
+            setTimeout(() => {
+                winModal.classList.remove('active');
+                successModal.classList.add('active');
+            }, 1500);
+        });
+
+        function triggerConfetti() {
+            var count = 200;
+            var defaults = { origin: { y: 0.7 } };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
+            }
+
+            fire(0.25, { spread: 26, startVelocity: 55, colors: ['#ff0000', '#00ff00', '#0000ff'] });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
+        }
+    </script>
+</body>
+</html>
+
+<script>
+  atOptions = {
+    'key' : '79b272d182f4ad853ef94d34f4f1ab08',
+    'format' : 'iframe',
+    'height' : 60,
+    'width' : 468,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/79b272d182f4ad853ef94d34f4f1ab08/invoke.js"></script>
+
+<script>
+  atOptions = {
+    'key' : '79b272d182f4ad853ef94d34f4f1ab08',
+    'format' : 'iframe',
+    'height' : 60,
+    'width' : 468,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/79b272d182f4ad853ef94d34f4f1ab08/invoke.js"></script>
