@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year 2026 Gift</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #ff0055;
+            --secondary-color: #6a11cb;
+            --gold: #ffd700;
+            --text-color: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #2e003e, #000000);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            color: var(--text-color);
+        }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Top Ad Container Style */
+        .top-ad-container {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 10px;
+            background: rgba(0,0,0,0.2);
+            padding: 5px 0;
+            overflow: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            margin: 1rem;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            position: relative;
+            min-height: 400px;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Great Vibes', cursive;
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Button Styles */
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #ff0055, #ff4444);
+            color: white;
+            box-shadow: 0 4px 20px rgba(255, 0, 85, 0.4);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(90deg, #25D366, #128C7E);
+            color: white;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-submit {
+            background: linear-gradient(90deg, #ffd700, #ffa500);
+            color: #333;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Screen Management */
+        .screen {
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- Gift Box Design --- */
+        .gift-area-header {
+            margin-bottom: 2rem;
+        }
+        
+        .gift-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .gift-box {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #d90429, #ef233c);
+            border-radius: 8px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        /* Ribbons */
+        .gift-box::before {
+            content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+            width: 15px; background: #ffd700; transform: translateX(-50%);
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        .gift-box::after {
+            content: ''; position: absolute; top: 50%; left: 0; right: 0;
+            height: 15px; background: #ffd700; transform: translateY(-50%);
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        /* The Bow */
+        .bow {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); width: 40px; height: 40px; z-index: 2;
+        }
+        .bow::before, .bow::after {
+            content: ''; position: absolute; width: 20px; height: 20px;
+            border: 4px solid #ffd700; border-radius: 50% 50% 0 50%;
+            top: 0; left: 0; transform: rotate(-45deg);
+        }
+        .bow::after { left: auto; right: 0; transform: rotate(135deg); }
+
+        .gift-box:hover { transform: translateY(-15px) rotate(5deg) !important; box-shadow: 0 15px 30px rgba(255, 0, 85, 0.5); }
+
+        .animate-box-1 { animation: popIn 0.6s forwards 0.2s; }
+        .animate-box-2 { animation: popIn 0.6s forwards 0.4s; }
+        .animate-box-3 { animation: popIn 0.6s forwards 0.6s; }
+
+        @keyframes popIn { to { opacity: 1; transform: translateY(0); } }
+
+        /* Result Section */
+        .result-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .winner-amount {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #00e676;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(0, 230, 118, 0.5);
+            word-wrap: break-word;
+        }
+
+        .input-group-result {
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .input-group-result label {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+
+        .result-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        .result-input:focus { border-color: var(--gold); background: rgba(255,255,255,0.2); }
+
+        /* Progress Bar Styling */
+        .progress-wrapper {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .progress-text {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: #ddd;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #25D366, #128C7E);
+            transition: width 0.5s ease;
+        }
+
+        /* UPI Section */
+        #upi-section {
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Toast */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.5s, bottom 0.5s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid #ffd700;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            display: none;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="confetti-canvas"></canvas>
+    <div id="toast">Message copied to clipboard!</div>
+
+    <!-- --- TOP AD SECTION (728x90 Banner) --- -->
+    <div class="top-ad-container">
+        <script>
+          atOptions = {
+            'key' : '2a2ea0db2a2d7c13a062bb42d3b60323',
+            'format' : 'iframe',
+            'height' : 90,
+            'width' : 728,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/2a2ea0db2a2d7c13a062bb42d3b60323/invoke.js"></script>
+    </div>
+
+    <div class="app-container">
+        
+        <!-- Screen 1: Home -->
+        <section id="screen-home" class="screen active">
+            <div style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem;">
+                <i class="fas fa-champagne-glasses"></i>
+            </div>
+            <h1>Happy New Year 2026</h1>
+            <p>Unlock your surprise gift for the new year!</p>
+            
+            <button class="btn btn-primary" onclick="goToGiftScreen()">
+                Open My Gift <i class="fas fa-arrow-right"></i>
+            </button>
+        </section>
+
+        <!-- Screen 2: Gift Selection -->
+        <section id="screen-gift" class="screen">
+            <div class="gift-area-header">
+                <h1>Happy New Year 2026</h1>
+                <p>Select a mystery box to reveal your prize</p>
+            </div>
+
+            <div class="loader" id="gift-loader"></div>
+
+            <div class="gift-container" id="gift-boxes">
+                <div class="gift-box animate-box-1" onclick="openGift()"><div class="bow"></div></div>
+                <div class="gift-box animate-box-2" onclick="openGift()"><div class="bow"></div></div>
+                <div class="gift-box animate-box-3" onclick="openGift()"><div class="bow"></div></div>
+            </div>
+        </section>
+
+        <!-- Screen 3: Result & Share -->
+        <section id="screen-result" class="screen">
+            <div class="result-card">
+                <div style="font-size: 3rem; color: var(--gold); margin-bottom: 10px;"><i class="fas fa-gift"></i></div>
+                <p>Congratulations! You have won:</p>
+                <div class="winner-amount" id="amount-display">₹ 0</div>
+            </div>
+
+            <div class="input-group-result">
+                <label for="username">Enter Your Name:</label>
+                <input type="text" id="username" class="result-input" placeholder="Type your name here...">
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-wrapper">
+                <div class="progress-text">Shared: <span id="share-count-display">0</span>/10</div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Share Button -->
+            <button class="btn btn-whatsapp" id="share-btn" onclick="shareResult()">
+                <i class="fab fa-whatsapp"></i> Share with 10 WhatsApp friends
+            </button>
+
+            <!-- UPI Section (Hidden initially) -->
+            <div id="upi-section">
+                <div class="input-group-result">
+                    <label for="upi-id" style="color: var(--gold); font-weight: bold;">Enter UPI ID to Withdraw:</label>
+                    <input type="text" id="upi-id" class="result-input" placeholder="example@upi">
+                </div>
+                <button class="btn btn-submit" onclick="submitUPI()">
+                    Withdraw Prize <i class="fas fa-wallet"></i>
+                </button>
+            </div>
+
+            <br><br>
+            <button class="btn" style="background: rgba(255,255,255,0.1); font-size: 0.9rem;" onclick="restartApp()">
+                <i class="fas fa-redo"></i> Try Again
+            </button>
+        </section>
+
+    </div>
+
+    <script>
+        // Variable Declarations
+        let currentAmount = 0;
+        let shareCount = 0;
+        const totalSharesNeeded = 10;
+        let confettiParticles = [];
+        let animationId;
+
+        // Wait for DOM to load completely (Fixes Navigation Issues)
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("App Loaded Successfully");
+        });
+
+        // DOM Elements
+        const screenHome = document.getElementById('screen-home');
+        const screenGift = document.getElementById('screen-gift');
+        const screenResult = document.getElementById('screen-result');
+        const giftLoader = document.getElementById('gift-loader');
+        const giftBoxes = document.getElementById('gift-boxes');
+        const amountDisplay = document.getElementById('amount-display');
+        const nameInput = document.getElementById('username');
+        const toast = document.getElementById('toast');
+        const shareCountDisplay = document.getElementById('share-count-display');
+        const progressFill = document.getElementById('progress-fill');
+        const shareBtn = document.getElementById('share-btn');
+        const upiSection = document.getElementById('upi-section');
+        const upiInput = document.getElementById('upi-id');
+
+        // Navigation Function with Scroll Fix
+        function showScreen(screen) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            // Show target screen
+            screen.classList.add('active');
+            // Scroll to top to ensure visibility
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.className = "show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        // Step 1 -> Step 2
+        function goToGiftScreen() {
+            showScreen(screenGift);
+        }
+
+        // Logic to Get Random Amount (20,000 to 1,00,000 INR)
+        function getRandomAmount() {
+            const min = 20000;
+            const max = 100000;
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // Step 2 -> Step 3 (Open Gift)
+        function openGift() {
+            giftBoxes.style.display = 'none';
+            giftLoader.style.display = 'block';
+
+            setTimeout(() => {
+                currentAmount = getRandomAmount();
+                amountDisplay.textContent = "₹ " + currentAmount.toLocaleString('en-IN');
+                
+                // Save to LocalStorage (No Database needed)
+                try {
+                    localStorage.setItem('ny_prize_amount', currentAmount);
+                } catch (e) {
+                    console.log("Local storage not available");
+                }
+                
+                showScreen(screenResult);
+                startConfetti();
+
+                giftLoader.style.display = 'none';
+                giftBoxes.style.display = 'flex';
+                
+                const boxes = document.querySelectorAll('.gift-box');
+                boxes[0].className = 'gift-box animate-box-1';
+                boxes[1].className = 'gift-box animate-box-2';
+                boxes[2].className = 'gift-box animate-box-3';
+
+                // Load existing share progress if any
+                loadProgress();
+
+            }, 1500);
+        }
+
+        // Load Progress from LocalStorage
+        function loadProgress() {
+            const savedCount = localStorage.getItem('ny_share_count');
+            if (savedCount) {
+                shareCount = parseInt(savedCount);
+            } else {
+                shareCount = 0;
+            }
+            updateProgressUI();
+        }
+
+        // Update UI based on count
+        function updateProgressUI() {
+            shareCountDisplay.textContent = shareCount;
+            const percentage = (shareCount / totalSharesNeeded) * 100;
+            progressFill.style.width = percentage + "%";
+
+            if (shareCount >= totalSharesNeeded) {
+                shareBtn.style.display = 'none';
+                upiSection.style.display = 'block';
+                showToast("Goal Reached! Enter UPI ID.");
+            } else {
+                shareBtn.style.display = 'flex';
+                upiSection.style.display = 'none';
+            }
+        }
+
+        // Share Logic
+        function shareResult() {
+            let name = nameInput.value.trim();
+            
+            if (name === "") {
+                showToast("Please enter your name first!");
+                nameInput.focus();
+                return;
+            }
+
+            // Increment Count
+            shareCount++;
+            try {
+                localStorage.setItem('ny_share_count', shareCount);
+            } catch (e) {}
+            
+            // Update UI
+            updateProgressUI();
+
+            // The Message
+            const message = `${name} shared and got ₹${currentAmount}! 🎉 Happy New Year 2026! Open your gift now: `;
+            
+            // Custom URL as requested
+            const url = "https://spin-win-three.vercel.app";
+
+            // Trigger Share
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Happy New Year 2026',
+                    text: message,
+                    url: url
+                }).catch(console.error);
+            } else {
+                // Fallback to Clipboard (Combining text + url)
+                const fullText = message + " " + url;
+                navigator.clipboard.writeText(fullText).then(() => {
+                    showToast("Copied! Paste it to WhatsApp.");
+                }).catch(() => {
+                    showToast("Unable to copy.");
+                });
+            }
+        }
+
+        // UPI Submit Logic
+        function submitUPI() {
+            let upi = upiInput.value.trim();
+            if (upi === "") {
+                showToast("Please enter a valid UPI ID!");
+                return;
+            }
+            showToast("Withdrawal Request Submitted Successfully!");
+            upiInput.value = "";
+            upiInput.disabled = true;
+        }
+
+        // Restart App
+        function restartApp() {
+            if(confirm("Do you want to restart? Your progress will be lost.")) {
+                try {
+                    localStorage.removeItem('ny_share_count');
+                    localStorage.removeItem('ny_prize_amount');
+                } catch (e) {}>No transactions yet</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ranking Section -->
+            <section id="ranking">
+                <div class="card">
+                    <h3 style="margin-bottom:15px; color:var(--primary-color);">🏆 Leaderboard</h3>
+                    
+                    <div class="lb-toggle">
+                        <div class="lb-btn active" id="btnDaily" onclick="switchLeaderboard('daily')">Daily</div>
+                        <div class="lb-btn" id="btnMonthly" onclick="switchLeaderboard('monthly')">Monthly</div>
+                    </div>
+
+                    <div id="leaderboardList">
+                        <!-- Content Generated by JS -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="navTo('home')" id="nav-home"><span class="nav-icon">🏠</span><span>Home</span></div>
+            <div class="nav-item" onclick="navTo('invite')" id="nav-invite"><span class="nav-icon">🔗</span><span>Invite</span></div>
+            <div class="nav-item" onclick="navTo('wallet')" id="nav-wallet"><span class="nav-icon">💰</span><span>Wallet</span></div>
+            <div class="nav-item" onclick="navTo('ranking')" id="nav-ranking"><span class="nav-icon">🏆</span><span>Ranking</span></div>
+        </nav>
+    </div>
+
+    <!-- Legal Modal -->
+    <div class="modal-overlay" id="legalModal">
+        <div class="modal legal-modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h3>Legal Information</h3>
+                <button class="btn btn-outline" style="width:auto; padding: 5px 10px;" onclick="closeModals()">Close</button>
+            </div>
+            <div class="legal-tabs">
+                <button class="legal-tab-btn active" id="btnTerms" onclick="showLegal('terms')">Terms of Service</button>
+                <button class="legal-tab-btn" id="btnPrivacy" onclick="showLegal('privacy')">Privacy Policy</button>
+            </div>
+            <div class="legal-text-body" id="legalContent">
+                <!-- Content Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Modal -->
+    <div class="modal-overlay" id="withdrawModal">
+        <div class="modal">
+            <h3 style="margin-bottom:15px;">Bank Transfer Request</h3>
+            <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Balance will be deducted immediately upon request.</p>
+            <div class="input-group"><label>Amount (₹)</label><input type="number" id="wAmount" class="input-field"></div>
+            <div class="input-group"><label>Account Holder Name</label><input type="text" id="wName" class="input-field"></div>
+            <div class="input-group"><label>Bank Name</label><input type="text" id="wBank" class="input-field"></div>
+            <div class="input-group"><label>Account Number</label><input type="text" id="wAcc" class="input-field"></div>
+            <div class="input-group"><label>IFSC Code</label><input type="text" id="wIfsc" class="input-field uppercase"></div>
+            <div class="input-group"><label>Mobile Number</label><input type="tel" id="wMobile" class="input-field"></div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn" onclick="processWithdraw()">Submit Request</button>
+                <button class="btn btn-outline" onclick="closeModals()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE SDK -->
+    <script type="module">
+        // Import Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, query, collection, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // === FIREBASE CONFIGURATION ===
+        const firebaseConfig = {
+          apiKey: "AIzaSyDZfUrq0oLhaNH4BT5eI8TJzTxZaHQnEEw",
+          authDomain: "usdt-33005.firebaseapp.com",
+          projectId: "usdt-33005",
+          storageBucket: "usdt-33005.appspot.com",
+          messagingSenderId: "804332729768",
+          appId: "1:804332729768:web:3d34009e4c5cc1005d599d"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // === GLOBAL STATE ===
+        let currentUser = null;
+        let userData = null;
+        let leaderboardType = 'daily';
+        let unsubscribe = null;
+        let referrerId = null;
+
+        // === LEGAL CONTENT DATA ===
+        const legalDocs = {
+            terms: `
+                <h1>Terms of Service</h1>
+                <p><strong>Last Updated:</strong> October 2023</p>
+                <p>Welcome to Spin Win (the "App"). By accessing or using our App, you agree to be bound by these Terms. If you disagree with any part of these terms, you must not access our App.</p>
+                
+                <h2>1. Description of Service</h2>
+                <p>Spin Win is an "Invite & Earn" mobile application platform that allows users to:</p>
+                <ul>
+                    <li>Participate in daily scratch cards to win virtual currency.</li>
+                    <li>Purchase a Premium Membership to unlock lifetime features.</li>
+                    <li>Invite friends to the platform and earn referral bonuses.</li>
+                    <li>Request withdrawal of earned virtual currency to bank accounts.</li>
+                </ul>
+
+                <h2>2. Premium Membership</h2>
+                <p>We offer a Premium Membership for a one-time fee (INR ₹99).</p>
+                <ul>
+                    <li>The fee is non-refundable once membership is activated.</li>
+                    <li>Premium status is linked to user account.</li>
+                    <li>We reserve the right to revoke premium status if a user violates our Terms.</li>
+                </ul>
+
+                <h2>3. Financial Transactions & Withdrawals</h2>
+                <ul>
+                    <li><strong>Earnings:</strong> Virtual currency earned via scratch cards or referrals has no cash value until a withdrawal request is approved.</li>
+                    <li><strong>Withdrawal Requests:</strong> Users can request withdrawals subject to minimum balance limits.</li>
+                    <li><strong>Approval Authority:</strong> All withdrawal requests are subject to manual review by Admin. We reserve the right to approve or reject any request without prior notice. Rejected amounts will be refunded to the user's wallet balance.</li>
+                    <li><strong>Processing Time:</strong> Withdrawals may take 3 to 7 business days to process depending on banking hours.</li>
+                    <li>Users must provide accurate banking details. We are not responsible for lost funds due to incorrect account information provided by the user.</li>
+                </ul>
+
+                <h2>4. Referral System</h2>
+                <p>Users may invite others to the App using a unique referral link.</p>
+                <ul>
+                    <li>A referral bonus (₹90) is credited only when the referred user successfully purchases a Premium Membership.</li>
+                    <li>Self-referral is strictly prohibited. Users found using fake accounts or abusing the referral system will have their accounts banned and earnings forfeited.</li>
+                </ul>
+
+                <h2>5. User Conduct</h2>
+                <ul>
+                    <li>Users agree not to use the App for any illegal or unauthorized purpose.</li>
+                    <li>Users must not use bots, scripts, or automated methods to manipulate game mechanics (Scratch Cards).</li>
+                    <li>Only one account per person is allowed. Multiple accounts will lead to a permanent ban.</li>
+                    <li>Any attempt to hack, exploit, or damage the App will result in immediate legal action.</li>
+                </ul>
+
+                <h2>6. Limitation of Liability</h2>
+                <p>Spin Win and its affiliates shall not be liable for any indirect, incidental, special, consequential or punitive damages, resulting from your access or use of the App.</p>
+            `,
+            privacy: `
+                <h1>Privacy Policy</h1>
+                <p><strong>Last Updated:</strong> October 2023</p>
+                <p>Spin Win ("we," "us," or "our") respects your privacy and is committed to protecting your personal information. This privacy policy will inform you how we use your data.</p>
+
+                <h2>1. Information We Collect</h2>
+                <p>We collect information you provide directly when using the App:</p>
+                <ul>
+                    <li><strong>Personal Information:</strong> Name, Email address (for Authentication).</li>
+                    <li><strong>Payment Information:</strong> We use Razorpay to process payments. We do not store your credit/debit card details. Razorpay is PCI DSS compliant and adheres to the highest level of security.</li>
+                    <li><strong>Bank Details:</strong> Account Number, IFSC Code, Bank Name (for processing withdrawals). These details are stored securely in our database (Firebase).</li>
+                    <li><strong>Usage Data:</strong> Earnings, scratch card history, referral list.</li>
+                </ul>
+
+                <h2>2. How We Use Your Information</h2>
+                <ul>
+                    <li>To create and manage your user account.</li>
+                    <li>To process Premium Membership payments via Razorpay.</li>
+                    <li>To process withdrawal requests and transfer money to your bank account.</li>
+                    <li>To credit referral bonuses to your wallet.</li>
+                    <li>To monitor for fraud, illegal activity, or policy violations.</li>
+                </ul>
+
+                <h2>3. Data Storage & Security</h2>
+                <p>We take reasonable measures to protect your data:</p>
+                <ul>
+                    <li><strong>Firebase (Google Cloud):</strong> User data (excluding financial card data) is stored in Firebase. Google Cloud provides industry-leading encryption and security.</li>
+                    <li><strong>Payment Data:</strong> All financial transactions are processed securely via Razorpay payment gateway.</li>
+                    <li>However, no method of transmission over the Internet, or method of electronic storage is 100% secure.</li>
+                </ul>
+
+                <h2>4. Third-Party Services</h2>
+                <p>We use third-party services to help operate our App:</p>
+                <ul>
+                    <li><strong>Firebase:</strong> For user authentication and real-time database.</li>
+                    <li><strong>Razorpay:</strong> For processing payments securely.</li>
+                </ul>
+
+                <h2>5. User Rights</h2>
+                <ul>
+                    <li><strong>Access:</strong> You can access and update your profile within the App.</li>
+                    <li><strong>Deletion:</strong> If you wish to delete your account and all personal data, please contact us at <strong>rahul615@gmail.com</strong>.</li>
+                    <li>Upon deletion, your wallet balance will be forfeited unless a valid withdrawal request is pending.</li>
+                </ul>
+            `
+        };
+
+        // === CHECK REFERRER ON LOAD ===
+        function checkReferrer() {
+            const params = new URLSearchParams(window.location.search);
+            const ref = params.get('ref');
+            if (ref) {
+                localStorage.setItem('ref_id', ref);
+                referrerId = ref;
+                console.log("Referrer ID found:", ref);
+            } else {
+                const storedRef = localStorage.getItem('ref_id');
+                if (storedRef) {
+                    referrerId = storedRef;
+                }
+            }
+        }
+        checkReferrer();
+
+        // === AUTH ===
+        window.toggleAuth = (screen) => {
+            if(screen === 'register') {
+                document.getElementById('loginCard').style.display = 'none';
+                document.getElementById('registerCard').style.display = 'block';
+            } else {
+                document.getElementById('loginCard').style.display = 'block';
+                document.getElementById('registerCard').style.display = 'none';
+            }
+        };
+
+        window.handleRegister = async () => {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPass').value.trim();
+            if(!name || !email || !pass) return showToast('Please fill all fields');
+
+            try {
+                // Create Auth User
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                const uid = userCredential.user.uid;
+
+                // Prepare User Data
+                const userData = {
+                    id: uid,
+                    name: name,
+                    email: email,
+                    password: pass,
+                    balance: 0,
+                    lastScratchDate: null,
+                    transactions: [],
+                    isPremium: false,
+                    invitedUsers: [],
+                    withdrawRequests: [],
+                    todayEarnings: 0,
+                    monthEarnings: 0,
+                    lastEarningResetDate: new Date().toDateString(),
+                    lastMonthResetDate: (new Date().getMonth() + 1) + "/" + new Date().getFullYear(),
+                    createdAt: new Date().toISOString()
+                };
+
+                // CREATE USER IN FIRESTORE
+                const newUserRef = doc(db, "users", uid);
+                await setDoc(newUserRef, userData);
+
+                // === REFERRAL LOGIC ===
+                if (window.referrerId) {
+                    userData.referredBy = window.referrerId;
+                    const referrerRef = doc(db, "users", window.referrerId);
+                    const referrerSnap = await getDoc(referrerRef);
+                    
+                    if (referrerSnap.exists()) {
+                        const referrerData = referrerSnap.data();
+                        const invitedList = referrerData.invitedUsers || [];
+                        invitedList.push({ uid: uid, name: name, date: new Date().toLocaleDateString() });
+                        await updateDoc(referrerRef, { invitedUsers: invitedList });
+                        localStorage.removeItem('ref_id');
+                    }
+                }
+
+                showToast('Registered! Please login.');
+                toggleAuth('login');
+            } catch (error) {
+                showToast(error.message);
+            }
+        };
+
+        window.handleLogin = async () => {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (error) {
+                showToast('Invalid email or password');
+            }
+        };
+
+        window.handleLogout = () => {
+            signOut(auth);
+            window.referrerId = null;
+            localStorage.removeItem('ref_id');
+        };
+
+        // === AUTH LISTENER ===
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('authScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                window.currentUser = user;
+                listenToUserData(user.uid);
+            } else {
+                document.getElementById('authScreen').style.display = 'flex';
+                document.getElementById('mainApp').style.display = 'none';
+                window.currentUser = null;
+                window.userData = null;
+                if(unsubscribe) unsubscribe(); 
+            }
+        });
+
+        // Listen to Real-time Data for Current User
+        function listenToUserData(uid) {
+            const userDocRef = doc(db, "users", uid);
+            
+            if (unsubscribe) unsubscribe();
+
+            unsubscribe = onSnapshot(userDocRef, (doc) => {
+                if (doc.exists()) {
+                    window.userData = doc.data();
+                    initApp();
+                }
+            });
+        }
+
+        // === APP LOGIC ===
+        function initApp() {
+            if(!window.userData) return;
+            const data = window.userData;
+            
+            // Ensure fields exist
+            if(!data.todayEarnings) data.todayEarnings = 0;
+            if(!data.monthEarnings) data.monthEarnings = 0;
+            if(!data.withdrawRequests) data.withdrawRequests = [];
+            if(!data.invitedUsers) data.invitedUsers = [];
+
+            checkDateResets(data);
+            
+            document.getElementById('headerUserName').innerText = data.name;
+            document.getElementById('headerUserId').innerText = data.id;
+            document.getElementById('refLink').innerText = window.location.origin + "/join/" + data.id;
+            
+            // Show Referrer Badge
+            const referrerInfoDiv = document.getElementById('referrerInfo');
+            const referrerIdSpan = document.getElementById('headerReferrerId');
+            if (data.referredBy) {
+                referrerInfoDiv.style.display = 'block';
+                referrerIdSpan.innerText = data.referredBy;
+            } else {
+                referrerInfoDiv.style.display = 'none';
+            }
+
+            updateUI(data);
+            resetScratchCardUI(data);
+            renderInvitedList(data);
+        }
+
+        function checkDateResets(data) {
+            const now = new Date();
+            const todayStr = now.toDateString();
+            const monthStr = (now.getMonth() + 1) + "/" + now.getFullYear();
+            let needsUpdate = false;
+
+            if (data.lastEarningResetDate !== todayStr) {
+                window.userData.todayEarnings = 0;
+                window.userData.lastEarningResetDate = todayStr;
+                needsUpdate = true;
+            }
+            if (data.lastMonthResetDate !== monthStr) {
+                window.userData.monthEarnings = 0;
+                window.userData.lastMonthResetDate = monthStr;
+                needsUpdate = true;
+            }
+
+            if(needsUpdate) saveToDB(window.userData);
+        }
+
+        async function saveToDB(dataObj) {
+            if(!window.currentUser) return;
+            const uid = window.currentUser.uid;
+            try {
+                await updateDoc(doc(db, "users", uid), dataObj);
+            } catch (e) {
+                console.error("Save Error:", e);
+                showToast("Error saving data");
+            }
+        }
+
+        function updateUI(data) {
+            document.getElementById('headerBalance').innerText = data.balance.toFixed(2);
+            document.getElementById('walletBalance').innerText = data.balance.toFixed(2);
+
+            // Membership UI
+            const card = document.getElementById('membershipCard');
+            const title = document.getElementById('memTitle');
+            const btn = document.getElementById('memBtn');
+            if (data.isPremium) {
+                card.classList.add('locked');
+                title.innerText = "🔒 Premium Unlocked";
+                btn.innerHTML = "Purchased";
+                btn.disabled = true;
+                btn.style.background = '#9ca3af';
+            } else {
+                card.classList.remove('locked');
+                title.innerText = "💎 Premium Membership";
+                btn.innerHTML = "Buy Now";
+                btn.disabled = false;
+                btn.style.background = 'linear-gradient(45deg, #FFD700, #FFA500)';
+            }
+
+            // Transaction List
+            const list = document.getElementById('transactionList');
+            list.innerHTML = '';
+            const allHistory = [
+                ...(data.transactions || []).map(t => ({...t, type: t.type || 'info'})),
+                ...(data.withdrawRequests || []).map(r => ({
+                    desc: 'Withdraw Request', 
+                    amount: r.amount, 
+                    type: 'debit', 
+                    isReq: true, 
+                    status: r.status,
+                    id: r.id
+                }))
+            ].sort((a,b) => b.id - a.id);
+
+            if(allHistory.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999; padding: 10px;">No transactions yet</p>';
+            } else {
+                allHistory.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'transaction-item';
+                    let statusBadge = item.isReq ? `<span class="req-status ${item.status}">${item.status}</span>` : '';
+                    div.innerHTML = `
+                        <span>${item.desc} ${statusBadge}</span>
+                        <span style="color:${item.type==='credit'?'green':'red'}">${item.type==='credit'?'+':'-'}₹${item.amount.toFixed(2)}</span>
+                    `;
+                    list.appendChild(div);
+                });
+            }
+        }
+
+        window.navTo = (id) => {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('nav-'+id).classList.add('active');
+
+            if(id === 'ranking') loadLeaderboard();
+        };
+
+        // === SCRATCH LOGIC ===
+        function resetScratchCardUI(data) {
+            const cover = document.getElementById('scratchCover');
+            const resultText = document.getElementById('scratchResultText');
+            const today = new Date().toDateString();
+            if (data.lastScratchDate === today) {
+                cover.style.display = 'none';
+                resultText.innerText = "Come back tomorrow!";
+            } else {
+                cover.style.display = 'flex';
+                resultText.innerText = "...";
+            }
+        }
+
+        window.revealPrize = (e) => {
+            if(e) { e.preventDefault(); e.stopPropagation(); }
+            if(!window.userData) return;
+
+            const cover = document.getElementById('scratchCover');
+            const resultText = document.getElementById('scratchResultText');
+            const today = new Date().toDateString();
+            if (cover.style.display === 'none') return;
+
+            let prize = parseFloat(Math.random().toFixed(2));
+            let msg = prize > 0 ? `₹ ${prize}` : "Better Luck Next Time";
+            
+            cover.style.display = 'none';
+            resultText.innerText = msg;
+
+            // Update Data
+            window.userData.lastScratchDate = today;
+            window.userData.balance += prize;
+            window.userData.todayEarnings += prize;
+            window.userData.monthEarnings += prize;
+
+            const newTx = {type:'credit', amount:prize, desc:'Scratch Card Win', id: Date.now()};
+            if(!window.userData.transactions) window.userData.transactions = [];
+            window.userData.transactions.push(newTx);
+
+            saveToDB(window.userData);
+            if(prize > 0) showToast(`You won ₹${prize}!`);
+            else showToast('Better luck next time!');
+        };
+
+        // === MEMBERSHIP (RAZORPAY) ===
+        window.buyMembership = () => {
+            if(window.userData.isPremium) return showToast('Already Premium');
+            if(!window.currentUser) return showToast('Please login first');
+
+            var options = {
+                "key": "rzp_test_RxIVm926W7KfMm",
+                "amount": "9900",
+                "currency": "INR",
+                "name": "Premium Membership",
+                "description": "Lifetime access for Invite & Earn App",
+                "image": "https://cdn-icons-png.flaticon.com/512/2952.png",
+                
+                // === IMPORTANT: LINKS FOR RAZORPAY POLICY ===
+                "notes": {
+                    "terms": window.location.origin + "/terms",
+                    "privacy": window.location.origin + "/privacy"
+                },
+                // ==========================================
+
+                "handler": async function (response){
+                    // Payment Success Handler
+                    console.log(response);
+                    
+                    // 1. Firebase Update
+                    window.userData.isPremium = true;
+                    await saveToDB(window.userData);
+
+                    // 2. REFERRAL BONUS LOGIC
+                    const storedRef = localStorage.getItem('ref_id');
+                    
+                    if (storedRef) {
+                        const referrerRef = doc(db, "users", storedRef);
+                        const referrerSnap = await getDoc(referrerRef);
+                        
+                        if (referrerSnap.exists()) {
+                            const referrerData = referrerSnap.data();
+                            const newBalance = (referrerData.balance || 0) + 90;
+                            const bonusTx = {type: 'credit', amount: 90, desc: 'Referral Bonus', id: Date.now()};
+                            const transactions = referrerData.transactions || [];
+                            transactions.push(bonusTx);
+
+                            await updateDoc(referrerRef, {
+                                balance: newBalance,
+                                transactions: transactions
+                            });
+
+                            localStorage.removeItem('ref_id');
+                            console.log("Bonus added to referrer!");
+                        }
+                    }
+
+                    showToast('Membership Activated!');
+                },
+                "modal": {
+                    "ondismiss": function(){
+                        console.log('Checkout form closed');
+                    }
+                }
+            };
+
+            var rzp = new Razorpay(options);
+            rzp.open();
+        };
+
+        // === WITHDRAW ===
+        window.openWithdrawModal = () => {
+            if(window.userData.balance <= 0) return showToast('Insufficient balance');
+            document.getElementById('withdrawModal').style.display = 'flex';
+        };
+
+        window.processWithdraw = async () => {
+            if(!window.userData) return;
+            
+            const amt = parseFloat(document.getElementById('wAmount').value);
+            const name = document.getElementById('wName').value;
+            const bank = document.getElementById('wBank').value;
+            const acc = document.getElementById('wAcc').value;
+            const ifsc = document.getElementById('wIfsc').value;
+            const mobile = document.getElementById('wMobile').value;
+
+            if(!amt || amt <= 0 || !name || !acc) return showToast('Fill details correctly');
+            if(amt > window.userData.balance) return showToast('Insufficient funds');
+
+            window.userData.balance -= amt;
+            
+            const req = {
+                id: Date.now(),
+                amount: amt,
+                details: { name, bank, acc, ifsc, mobile },
+                status: 'pending',
+                date: new Date().toLocaleDateString()
+            };
+
+            if(!window.userData.withdrawRequests) window.userData.withdrawRequests = [];
+            window.userData.withdrawRequests.push(req);
+            saveToDB(window.userData);
+            closeModals();
+            showToast('Withdrawal request submitted! Balance deducted.');
+            document.querySelectorAll('#withdrawModal input').forEach(i => i.value = '');
+        };
+
+        // === HELPERS ===
+        window.closeModals = () => {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+        }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg; t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+        window.copyLink = () => {
+            navigator.clipboard.writeText(document.getElementById('refLink').innerText).then(()=>showToast('Link copied!'));
+        }
+        window.nativeShare = () => {
+            if (navigator.share) navigator.share({url: document.getElementById('refLink').innerText});
+            else copyLink();
+        }
+        window.shareWhatsapp = () => {
+            window.open(`https://wa.me/?text=Join here: ${document.getElementById('refLink').innerText}`, '_blank');
+        }
+
+        // === LEGAL MODAL LOGIC ===
+        window.openLegal = () => {
+            document.getElementById('legalModal').style.display = 'flex';
+            showLegal('terms'); // Default to terms
+        };
+
+        window.showLegal = (type) => {
+            const container = document.getElementById('legalContent');
+            const btnTerms = document.getElementById('btnTerms');
+            const btnPrivacy = document.getElementById('btnPrivacy');
+
+            if (type === 'terms') {
+                container.innerHTML = legalDocs.terms;
+                btnTerms.classList.add('active');
+                btnPrivacy.classList.remove('active');
+            } else {
+                container.innerHTML = legalDocs.privacy;
+                btnTerms.classList.remove('active');
+                btnPrivacy.classList.add('active');
+            }
+        };
+
+        // === RENDER INVITED LIST ===
+        function renderInvitedList(data) {
+            const listContainer = document.getElementById('invitedList');
+            const titleContainer = document.getElementById('inviteListTitle');
+            
+            listContainer.innerHTML = '';
+            const list = data.invitedUsers || [];
+            titleContainer.innerText = `Invited Routes (${list.length})`;
+
+            if (list.length > 0) {
+                list.forEach(user => {
+                    const div = document.createElement('div');
+                    div.className = 'invited-item';
+                    div.innerHTML = `
+                        <div class="invited-avatar">${user.name.charAt(0).toUpperCase()}</div>
+                        <div>
+                            <div style="font-weight:600; font-size:0.9rem;">${user.name}</div>
+                            <div style="font-size:0.75rem; color:#666;">${user.date}</div>
+                        </div>
+                        <div class="invited-status">Joined</div>
+                    `;
+                    listContainer.appendChild(div);
+                });
+            } else {
+                listContainer.innerHTML = '<p style="text-align:center; color:#999; font-size:0.9rem; padding:10px;">No invites yet</p>';
+            }
+        }
+
+        // === LEADERBOARD LOGIC ===
+        window.switchLeaderboard = (type) => {
+            leaderboardType = type;
+            document.getElementById('btnDaily').className = type === 'daily' ? 'lb-btn active' : 'lb-btn';
+            document.getElementById('btnMonthly').className = type === 'monthly' ? 'lb-btn active' : 'lb-btn';
+            loadLeaderboard();
+        };
+
+        async function loadLeaderboard() {
+            const listContainer = document.getElementById('leaderboardList');
+            listContainer.innerHTML = '';
+            if(!window.currentUser) return;
+            
+            const q = query(collection(db, "users"));
+            const querySnapshot = await getDocs(q);
+            const allUsers = querySnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+            
+            const rankedUsers = allUsers.map(u => ({
+                name: u.name,
+                earnings: (leaderboardType === 'daily' ? (u.todayEarnings || 0) : (u.monthEarnings || 0)),
+                isMe: u.uid === window.currentUser.uid
+            })).sort((a, b) => b.earnings - a.earnings);
+
+            if (rankedUsers.length === 0) {
+                listContainer.innerHTML = '<p style="text-align:center; padding:20px;">No data available</p>';
+                return;
+            }
+
+            rankedUsers.forEach((user, index) => {
+                const item = document.createElement('div');
+                const rank = index + 1;
+                let rankClass = '';
+                if (rank === 1) rankClass = 'rank-1';
+                else if (rank === 2) rankClass = 'rank-2';
+                else if (rank === 3) rankClass = 'rank-3';
+
+                item.className = `lb-item ${user.isMe ? 'me' : ''}`;
+                item.innerHTML = `
+                    <div class="lb-rank ${rankClass}">${rank}</div>
+                    <div class="lb-avatar">${user.name.charAt(0).toUpperCase()}</div>
+                    <div class="lb-info">
+                        <div class="lb-name">${user.name} ${user.isMe ? '(You)' : ''}</div>
+                        <div class="lb-earning">Earned: ₹${user.earnings.toFixed(2)}</div>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+    </script>
+</body>
+</html>
