@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Mobile Recharge - Govt Scheme</title>
+    <style>
+        :root {
+            --primary-color: #25D366; /* WhatsApp Green */
+            --secondary-color: #128C7E;
+            --accent-color: #FFD700; /* Gold */
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 0; /* Padding adjusted for top banner */
+        }
+
+        /* Top Ad Container Styling */
+        .top-ad-container {
+            width: 100%;
+            background-color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            position: relative;
+            z-index: 10;
+        }
+
+        .top-ad-container iframe {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Main Container */
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            margin: 20px 0; /* Margin for breathing room */
+            z-index: 20;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            padding: 25px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 13px;
+            opacity: 0.95;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 5px;
+        }
+
+        .logo-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 25px 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* Operator Selection */
+        .operator-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .operator-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 10px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 90px;
+            background: #fff;
+        }
+
+        .operator-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .operator-card.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 211, 102, 0.1);
+            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
+        }
+
+        .op-name {
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        .op-logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        /* Price Selection (Dynamic) */
+        .price-container {
+            margin-bottom: 25px;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .price-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .price-amount {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .price-details {
+            font-size: 12px;
+            margin-top: 5px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .empty-state {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        /* Action Button */
+        .btn-main {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #FFD700, #FFA500);
+            border: none;
+            border-radius: 50px;
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn-main:active {
+            transform: scale(0.98);
+        }
+
+        /* Modal / Popup */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1000; /* High z-index to stay above ads */
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: white;
+            width: 100%;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
+        }
+
+        /* Progress Bar Styles */
+        .progress-container {
+            margin: 20px 0;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #FFD700, #25D366);
+            transition: width 0.4s ease;
+        }
+
+        .count-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .whatsapp-icon {
+            color: var(--primary-color);
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .btn-share {
+            background-color: var(--primary-color);
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed; /* Fixed to be always visible */
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(50px);
+            background-color: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.3s;
+            width: 90%;
+            text-align: center;
+            z-index: 2000; /* Very high z-index */
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Loader */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success Animation */
+        .success-wrapper {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .success-circle {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            margin-bottom: 15px;
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.6);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .success-title {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            animation: slideUp 0.5s ease-out 0.2s both;
+        }
+
+        .success-desc {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            animation: slideUp 0.5s ease-out 0.3s both;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall linear forwards;
+            pointer-events: none;
+            z-index: 1500;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(720deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- TOP AD: Placed at the very top of the page -->
+<div class="top-ad-container">
+    <script>
+      atOptions = {
+        'key' : 'd1c44746254fd729061a396e86a44d32',
+        'format' : 'iframe',
+        'height' : 90,
+        'width' : 728,
+        'params' : {}
+      };
+    </script>
+    <script src="https://www.highperformanceformat.com/d1c44746254fd729061a396e86a44d32/invoke.js"></script>
+</div>
+
+<div class="app-container">
+    <!-- Header -->
+    <header class="header">
+        <span class="logo-icon">🏛️</span>
+        <h1>Free Recharge</h1>
+        <p>Free Recharge Under Govt Scheme</p>
+    </header>
+
+    <!-- Main Form -->
+    <main class="form-section">
+        <!-- Mobile Number Input -->
+        <div class="input-group">
+            <label class="label">Mobile Number</label>
+            <input type="tel" id="mobileNumber" class="input-field" placeholder="Ex: 9123456789" maxlength="10">
+        </div>
+
+        <!-- Operator Selection -->
+        <div class="input-group">
+            <label class="label">Select Operator</label>
+            <div class="operator-grid" id="operatorGrid">
+                
+                <!-- Jio -->
+                <div class="operator-card" data-op="Jio">
+                    <img src="https://i.ibb.co/4nrpJrT7/Reliance-Jio-Logo-October-2015-svg.png" class="op-logo" alt="Jio">
+                    <div class="op-name" style="color:#0098D6">Jio</div>
+                </div>
+
+                <!-- Airtel -->
+                <div class="operator-card" data-op="Airtel">
+                    <img src="https://i.ibb.co/GvXxpwgj/Airtel-logo-01.png" class="op-logo" alt="Airtel">
+                    <div class="op-name" style="color:#ED1C24">Airtel</div>
+                </div>
+
+                <!-- Vi -->
+                <div class="operator-card" data-op="Vi">
+                    <img src="https://i.ibb.co/vxVmZcg3/vi-vodafone-idea-vector-logo-logoshape-com.png" class="op-logo" alt="Vi">
+                    <div class="op-name" style="color:#FF5C00">Vi</div>
+                </div>
+
+                <!-- BSNL -->
+                <div class="operator-card" data-op="BSNL">
+                    <img src="https://i.ibb.co/TxW7Hm3k/bsnl-app-icon.png" class="op-logo" alt="BSNL">
+                    <div class="op-name" style="color:#333333">BSNL</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Dynamic Price Selection -->
+        <div class="input-group">
+            <label class="label">Plan Details</label>
+            <div class="price-container" id="priceContainer">
+                <!-- Dynamic Card will be injected here -->
+                <div class="empty-state">Select an operator above to see plans</div>
+            </div>
+        </div>
+
+        <!-- Main Button -->
+        <button class="btn-main" id="rechargeBtn">Get Recharge</button>
+    </main>
+
+    <!-- Custom Toast -->
+    <div id="toast" class="toast">Error message here</div>
+
+    <!-- Share Modal -->
+    <div class="modal-overlay" id="shareModal">
+        <div class="modal-card">
+            
+            <!-- Step 1: Sharing Counter -->
+            <div id="shareStep">
+                <div class="whatsapp-icon">📲</div>
+                <h3 class="modal-title">Share to Unlock!</h3>
+                
+                <div class="count-text" id="countText">Shared: 0/10</div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+
+                <p class="modal-desc" style="margin-top:15px; font-size:13px;">
+                    To get your Free Recharge, you must share this offer with <b>10 friends</b> on WhatsApp.
+                </p>
+
+                <button class="btn-share" id="shareBtn">
+                    <span>Share on WhatsApp</span>
+                </button>
+            </div>
+
+            <!-- Step 2: Processing -->
+            <div id="processStep" style="display: none;">
+                <div class="loader"></div>
+                <h3 class="modal-title">Verifying...</h3>
+                <p class="modal-desc">Please wait while we process your recharge request.</p>
+            </div>
+
+            <!-- Step 3: Success -->
+            <div class="success-wrapper" id="successStep">
+                <div class="success-circle">✓</div>
+                <div class="success-title">Congratulations!</div>
+                <div class="success-desc">
+                    Your recharge request was successful.<br>
+                    ₹<span id="finalAmount">0</span> will be credited to your number soon.
+                </div>
+                <button class="btn-main" onclick="location.reload()" style="font-size:14px;">Recharge Again</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Main App Script -->
+<script>
+    // Data: Specific Plans for each operator
+    const operatorPlans = {
+        'Jio': {
+            amount: '349',
+            details: 'Unlimited Call, 2GB/Day'
+        },
+        'Airtel': {
+            amount: '349',
+            details: 'Unlimited Call, 1.5GB/Day'
+        },
+        'Vi': {
+            amount: '349',
+            details: 'Unlimited Call, 1.5GB/Day'
+        },
+        'BSNL': {
+            amount: '599',
+            details: 'Unlimited Call, 3GB/Day'
+        }
+    };
+
+    // State Variables
+    let selectedOperator = null;
+    let selectedAmount = null;
+    let mobileNumber = "";
+    let shareCount = 0;
+    const maxShare = 10;
+
+    // DOM Elements
+    const mobileInput = document.getElementById('mobileNumber');
+    const operatorCards = document.querySelectorAll('.operator-card');
+    const priceContainer = document.getElementById('priceContainer');
+    const rechargeBtn = document.getElementById('rechargeBtn');
+    const toast = document.getElementById('toast');
+    const shareModal = document.getElementById('shareModal');
+    const shareBtn = document.getElementById('shareBtn');
+    
+    // Modal Sections
+    const shareStep = document.getElementById('shareStep');
+    const processStep = document.getElementById('processStep');
+    const successStep = document.getElementById('successStep');
+    
+    // Counter Elements
+    const countText = document.getElementById('countText');
+    const progressBar = document.getElementById('progressBar');
+    const finalAmountDisplay = document.getElementById('finalAmount');
+
+    // Helper: Show Toast
+    function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // Logic: Handle Operator Selection
+    operatorCards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Remove previous selection
+            operatorCards.forEach(c => c.classList.remove('selected'));
+            // Add new selection
+            card.classList.add('selected');
+            
+            // Set Data
+            selectedOperator = card.getAttribute('data-op');
+            
+            // Render Plan
+            renderPlan(selectedOperator);
+        });
+    });
+
+    // Function: Render Plan based on Operator
+    function renderPlan(operator) {
+        if (!operatorPlans[operator]) return;
+
+        const plan = operatorPlans[operator];
+        selectedAmount = plan.amount;
+
+        // Create Price Card HTML
+        const html = `
+            <div class="price-card selected">
+                <div class="price-amount">₹${plan.amount}</div>
+                <div class="price-details">${plan.details}</div>
+            </div>
+        `;
+
+        priceContainer.innerHTML = html;
+    }
+
+    // Logic: Mobile Number Input Restriction
+    mobileInput.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        mobileNumber = e.target.value;
+    });
+
+    // Logic: Validate and Open Share Modal
+    rechargeBtn.addEventListener('click', () => {
+        if (mobileNumber.length !== 10) {
+            showToast("Please enter a valid 10-digit Mobile Number.");
+            return;
+        }
+        if (!selectedOperator) {
+            showToast("Please select your Operator.");
+            return;
+        }
+        if (!selectedAmount) {
+            showToast("Please select a Plan.");
+            return;
+        }
+        
+        updateCounterUI();
+        shareModal.classList.add('active');
+    });
+
+    // Update Counter UI
+    function updateCounterUI() {
+        countText.innerHTML = `Shared: <span style="color:var(--primary-color)">${shareCount}</span> / ${maxShare}`;
+        const percentage = (shareCount / maxShare) * 100;
+        progressBar.style.width = `${percentage}%`;
+    }
+
+    // Logic: WhatsApp Share Button Click
+    shareBtn.addEventListener('click', () => {
+        if (shareCount < maxShare) {
+            shareCount++;
+            updateCounterUI();
+
+            // WhatsApp Message
+            const message = `Hey! I am getting ₹${selectedAmount} Free Recharge! You can get it too here: ${window.location.href}`;
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+
+            // Open WhatsApp
+            window.open(whatsappUrl, '_blank');
+
+            if (shareCount >= maxShare) {
+                setTimeout(() => {
+                    triggerSuccess();
+                }, 1000);
+            }
+        }
+    });
+
+    // Trigger Success Sequence
+    function triggerSuccess() {
+        shareStep.style.display = 'none';
+        processStep.style.display = 'block';
+
+        // Simulate Server Delay (3 seconds)
+        setTimeout(() => {
+            processStep.style.display = 'none';
+            successStep.style.display = 'flex';
+            
+            finalAmountDisplay.textContent = selectedAmount;
+            createConfetti();
+            
+        }, 3000);
+    }
+
+    // Confetti Animation Logic
+    function createConfetti() {
+        const colors = ['#FFD700', '#25D366', '#FF0000', '#0000FF'];
+        const confettiCount = 50;
+
+        for (let i = 0; i < confettiCount; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.top = '-10px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDuration = (Math.random() * 2 + 1) + 's'; 
+            
+            document.body.appendChild(confetti);
+
+            setTimeout(() => {
+                confetti.remove();
+            }, 3000);
+        }
+    }
+
+    // Close Modal if clicked outside (only before success)
+    shareModal.addEventListener('click', (e) => {
+        if (e.target === shareModal) {
+            if(shareCount < maxShare) {
+                shareModal.classList.remove('active');
+            }
+        }
+    });
+
+</script>
+
+<!-- BOTTOM AD: Placed at the very bottom of the body -->
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+
+</body>
+</html>
+<script src="https://pl28368138.effectivegatecpm.com/1c/45/ca/1c45ca7ea0c19217b50be4db45bcd7bb.js"></script>nimateConfetti();
+        }
+
+        function stopConfetti() {
+            cancelAnimationFrame(animationId);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confettiParticles.forEach((p) => {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.rotation += p.rotationSpeed;
+                
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.restore();
+
+                if (p.y > canvas.height) {
+                    p.y = -10;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            animationId = requestAnimationFrame(animateConfetti);
+        }
+    </script>
+
+</body>
+</html>nimateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confettiParticles.forEach((p) => {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.rotation += p.rotationSpeed;
+                
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.restore();
+
+                if (p.y > canvas.height) {
+                    p.y = -10;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            animationId = requestAnimationFrame(animateConfetti);
+        }
+    </script>
+
+    <!-- --- POP-UNDER ADS (Click Triggered) --- -->
+    <!-- These scripts will trigger on first user click anywhere on the page -->
+    <script src="https://pl28368138.effectivegatecpm.com/1c/45/ca/1c45ca7ea0c19217b50be4db45bcd7bb.js"></script>
+    <script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+
+</body>
+</html>ca68154b1edae19d98a8bead3e14.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>eight' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/d1c44746254fd729061a396e86a44d32/invoke.js"></script>
+<script>
+  atOptions = {
+    'key' : 'd1c44746254fd729061a396e86a44d32',
+    'format' : 'iframe',
+    'height' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/d1c44746254fd729061a396e86a44d32/invoke.js"></script>
+<script>
+  atOptions = {
+    'key' : 'd1c44746254fd729061a396e86a44d32',
+    'format' : 'iframe',
+    'height' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/d1c44746254fd729061a396e86a44d32/invoke.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
+<script src="https://pl28368146.effectivegatecpm.com/c7/1b/ca/c71bca68154b1edae19d98a8bead3e14.js"></script>
